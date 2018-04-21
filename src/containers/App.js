@@ -1,29 +1,54 @@
 import React, { Component } from 'react';
 import '../css/App.css';
 import RaisedButton from 'material-ui/RaisedButton';
+import Particles from 'react-particles-js';
+import '../css/common.css';
 
 class App extends Component {
+  
+  state = {
+    particleNum: 40,
+	};
 
   addCircle = () => {
-    const x = Math.floor(Math.random() * 600);
-    const y = Math.floor(Math.random() * 250);
-    const ctx = this.refs.canvas1.getContext('2d');
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.arc(x, y, 10, 0, 2 * Math.PI);
-    ctx.stroke(); 
+	  const inc = 20;
+	  this.setState({
+		  particleNum: this.state.particleNum + inc * 1
+		});
   }
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Deisgn music demo</h1>
-        </header>
-        <RaisedButton label="start" primary onClick={this.addCircle} style={{margin: 20}}/>
-        <div>
-          <canvas ref="canvas1" height="300" width="700">
-        </canvas>
-        </div>
+      <div className="App col-flex-container">
+			  <div style={{width: '100vw'}} className="App-header">
+				  <header>
+				  	<h1 className="App-title">Deisgn music demo</h1>
+				  </header>
+          <RaisedButton label="start" primary onClick={this.addCircle} style={{margin: 20}}/>
+				</div>
+		    <Particles 
+              params={{
+            		particles: {
+								  number: {
+                    value: this.state.particleNum,
+										density: {
+										  enable: false,
+										}
+									}, 
+            			line_linked: {
+            				shadow: {
+            					enable: true,
+            					color: "#AAA",
+            					blur: 5
+            				}
+            			}
+            		}
+            	}}
+              style={{
+							  flex: 1,
+								backgroundColor: '#000'
+              }}
+							width={'100vw'}
+				/>
       </div>
     );
   }
