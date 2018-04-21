@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "material-ui": "^0.20.0",
+    "mo-js": "^0.288.2",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-particles-js": "^2.1.2",
