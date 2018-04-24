@@ -8,7 +8,7 @@ class App extends Component {
   
   
 
-  addBurst = () => {
+  addBurst = (color) => () => {
 		const burst = new mojs.Burst({
 	
 			radius:   { 0: 100 },
@@ -16,7 +16,8 @@ class App extends Component {
 			children: {
 				shape:        'circle',
 				radius:       20,
-				fill:       [ 'deeppink', 'cyan', 'yellow' ],
+				// fill:       [ 'deeppink', 'cyan', 'yellow' ],
+				fill:       [color],
 				strokeWidth:  5,
 				duration:     2000
 			}
@@ -29,9 +30,30 @@ class App extends Component {
 			.replay();
 	}
 	
-	
+	renderBtn = (item) => {
+		return (
+			<ClickBurst>
+				<button onClick={this.addBurst(item.color)}>{item.title}</button>
+			</ClickBurst>
+		)
+	}
 
   render() {
+		const items = [
+			{
+				color: 'deeppink',
+				title: 'lala'
+			},
+			{
+				color: 'cyan',
+				title: 'wooow'
+			},
+			{
+				color: 'yellow',
+				title: 'woohoo'
+			}
+		];
+
     return (
       <div className="App col-flex-container">
 			  <div className="App-header">
@@ -39,9 +61,7 @@ class App extends Component {
 				  	<h1 className="App-title">Deisgn music demo</h1>
 				  </header>
           {/* <RaisedButton label="start" primary onClick={this.addCircle} style={{margin: 20}}/> */}
-					<ClickBurst>
-					  <button onClick={this.addBurst}>Start</button>
-					</ClickBurst>
+					{items.map(this.renderBtn)}
 				</div>
 		    
       </div>
