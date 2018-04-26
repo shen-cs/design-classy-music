@@ -1,23 +1,20 @@
 import React, { Component } from 'react';
-import ClickBurst from '../components/ClickBurst';
 import mojs from 'mo-js';
+import firebase from '../firebase';
+import ClickBurst from '../components/ClickBurst';
+
 import '../css/common.css';
 
 class Demo extends Component {
-	
+
+	componentDidMount() {
+    this.firebaseRef = firebase.database().ref('/records');
+  }
+  
 	saveData = (title) => {
-		const data = { title};
-		fetch('http://localhost:5000/api/data', {
-			headers: new Headers({
-				'Content-Type': 'application/json'
-			}),
-			mode: 'cors',
-			method: 'POST',
-			body: JSON.stringify(data)
-		})
-		.then(res => res.json())
-		.then(data => {
-			// console.log(data);
+		this.firebaseRef.push({
+			timestamp: new Date().toString(),
+			type: title
 		})
 	}
 

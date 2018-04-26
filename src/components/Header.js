@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import firebase from '../firebase';
+import Snackbar from 'material-ui/Snackbar';
 import HomeIcon from 'material-ui/svg-icons/action/home';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import ViewIcon from 'material-ui/svg-icons/action/visibility';
@@ -10,23 +12,37 @@ import '../css/common.css';
 
 class Header extends Component { 
   
+  state = {
+    empty: false
+  };
+
+  componentDidMount() {
+    this.firebaseRef = firebase.database().ref('/records');
+    this.firebaseCallback = this.firebaseRef.on('value', (snap) => {      
+      if(!snap.val()) {
+        console.log('Data Empty');
+        this.setState({empty: true}, () => {
+          setTimeout(() => this.setState({empty: false}), 3000)
+        });
+      }
+    });
+  }
+  
+  componentWillUnmount() {
+    // Un-register the listener on '/todoList'.
+    this.firebaseRef.off('value', this.firebaseCallback);
+  }
+
   navigate = (path) => () => {
     this.props.history.push(path);
   }
 
   deleteAll = () => {
-    fetch('http://localhost:5000/api/data', {
-      headers: new Headers({
-				'Content-Type': 'application/json'
-			}),
-      mode: 'cors',
-      method: 'DELETE',
-      body: JSON.stringify({del: true})
-    })
-    .then(res => res.json())
-		.then(data => {
-			console.log('All data deleted.');
-		})
+    this.firebaseRef.remove();
+  }
+
+  handleRequestClose = () => {
+    this.setState({emtpy: false});
   }
   render() {
     const { location } = this.props;
@@ -34,7 +50,7 @@ class Header extends Component {
       <div className="row-flex-container">
           <div className="space"/>
 				  <header className="App-header">
-				  	<h1 className="App-title">Deisgn music demo</h1>
+				  	<h1 className="App-title">Design music demo</h1>
 				  </header>
           <div className="row-flex-container icon-container" > 
             <IconButton 
@@ -58,6 +74,10 @@ class Header extends Component {
               <DeleteIcon/>
             </IconButton>
           </div>
+          <Snackbar 
+            open={this.state.empty}
+            message="資料已淨空"
+            contentStyle={{backgroundColor: '#212121'}}/>
       </div>
     );
   }
