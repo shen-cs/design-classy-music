@@ -9,3 +9,7 @@
 	flex-direction: row;
 	align-items: center;
 }
+
+.justify {
+	justify-content: center;
+}
